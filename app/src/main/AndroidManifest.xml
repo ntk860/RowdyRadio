@@ -18,6 +18,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".AlarmsActivity"
+            android:label="@string/title_activity_alarms"
+            android:parentActivityName=".mainactivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="rowdy.utsa.group3.rowdyradio.mainactivity" />
+        </activity>
     </application>
 
 </manifest>
