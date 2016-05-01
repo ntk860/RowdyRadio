@@ -32,7 +32,7 @@ public class mainactivity extends AppCompatActivity {
     }
 
     public void Login(View view) {
-        //Intent intent = new Intent(mainactivity.this, mainradio.class);
-        //startActivity(intent);
+        Intent intent = new Intent(mainactivity.this, mainradio.class);
+        startActivity(intent);
     }
 }
