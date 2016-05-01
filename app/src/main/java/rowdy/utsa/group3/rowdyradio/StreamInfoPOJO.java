@@ -13,6 +13,11 @@ public class StreamInfoPOJO {
     @SerializedName("icestats")
     private Stats icecastStats;
 
+    public StreamInfoPOJO() {
+    }
+
+
+
     public Stats getIcecastStats() {
         return icecastStats;
     }
