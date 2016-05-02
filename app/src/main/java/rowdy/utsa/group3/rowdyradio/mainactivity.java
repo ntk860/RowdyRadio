@@ -6,7 +6,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.io.IOException;
+
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 public class mainactivity extends AppCompatActivity {
+
+    public static final String BASE_URL = "http://10.245.121.71/";
+    private RowdyRadioService rowdyRadioService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,9 +25,18 @@ public class mainactivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
-        /*TODO create and display newsfeed*/
-        /*TODO create and display stream*/
-        /*TODO create and display the volumen controls*/
+        OkHttpClient client = new OkHttpClient();
+        client.interceptors().add(new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                Request request = chain.request();
+                Response response = chain.proceed(request);
+                response.code();
+                return response;
+            }
+        });
+
+
     }
 
     @Override
@@ -40,5 +59,13 @@ public class mainactivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public RowdyRadioService getRowdyRadioService() {
+        return rowdyRadioService;
+    }
+
+    public void setRowdyRadioService(RowdyRadioService rowdyRadioService) {
+        this.rowdyRadioService = rowdyRadioService;
     }
 }

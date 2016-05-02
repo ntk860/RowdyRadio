@@ -1,4 +1,4 @@
-package rowdy.utsa.group3.rowdyradio;
+package rowdy.utsa.group3.rowdyradio.model;
 
 import com.google.gson.annotations.SerializedName;
 
