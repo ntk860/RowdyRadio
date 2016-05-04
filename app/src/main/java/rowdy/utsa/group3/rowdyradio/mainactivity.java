@@ -1,7 +1,6 @@
 package rowdy.utsa.group3.rowdyradio;
 
 import android.content.Intent;
-
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -9,6 +8,12 @@ import android.view.MenuItem;
 import android.view.View;
 
 public class mainactivity extends AppCompatActivity {
+
+    private String artistName;
+    private String songName;
+    private String hostName;
+    private String listenerCount;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,4 +40,7 @@ public class mainactivity extends AppCompatActivity {
         Intent intent = new Intent(mainactivity.this, mainradio.class);
         startActivity(intent);
     }
+
+
+
 }

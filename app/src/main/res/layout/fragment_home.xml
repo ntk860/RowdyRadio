@@ -13,7 +13,82 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="home fragnment" />
+            android:text=""
+            android:id="@+id/textView9" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/artistName"
+            android:text="Artist Name"
+            android:textSize="20dp"
+            android:textIsSelectable="false"
+            android:layout_below="@+id/albumArt"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/songName"
+            android:text="Song Name"
+            android:textSize="20dp"
+            android:textIsSelectable="false"
+            android:layout_below="@+id/artistName"
+            android:layout_centerHorizontal="true" />
+
+        <ImageView
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:id="@+id/albumArt"
+            android:src="@drawable/bohemian_rhapsody"
+            android:layout_below="@+id/textView9"
+            android:layout_centerHorizontal="true" />
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/playBtn"
+            android:src="@android:drawable/ic_media_play"
+            android:layout_below="@+id/songName"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="31dp" />
+
+        <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ratingBar"
+            android:layout_below="@+id/playBtn"
+            android:layout_alignLeft="@+id/albumArt"
+            android:layout_alignStart="@+id/albumArt" />
+
+        <SeekBar
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/seekBar"
+            android:progress="80"
+            android:layout_below="@+id/ratingBar"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/pauseBtn"
+            android:layout_alignBottom="@+id/playBtn"
+            android:layout_centerHorizontal="true"
+            android:src="@android:drawable/ic_media_pause"
+            android:visibility="invisible" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Small Text"
+            android:id="@+id/listenerCount"
+            android:layout_below="@+id/seekBar"
+            android:layout_centerHorizontal="true" />
+
+
     </RelativeLayout>
 
 

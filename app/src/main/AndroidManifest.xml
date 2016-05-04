@@ -3,6 +3,8 @@
     package="rowdy.utsa.group3.rowdyradio">
 
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <uses-sdk android:minSdkVersion="17" />
 
     <application

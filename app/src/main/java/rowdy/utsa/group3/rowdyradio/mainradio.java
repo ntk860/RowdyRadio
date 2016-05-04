@@ -1,19 +1,23 @@
 package rowdy.utsa.group3.rowdyradio;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.os.Handler;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.view.View;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class mainradio extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -21,18 +25,33 @@ public class mainradio extends AppCompatActivity
     Fragment fragment = null;
     Class fragmentClass = null;
 
+    String artistName;
+    String listenerCount;
+    String songName;
+    String hostName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mainradio);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
+        new AsyncTaskParseJson().execute();
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                new AsyncTaskParseJson().execute();
+                handler.postDelayed(this, 30000); //now is every 30 seconds
+            }
+        }, 30000); //Every 30000 ms (30 seconds)
+
         toolbar.setTitle("Rowdy Radio");
         setSupportActionBar(toolbar);
 
         fragmentClass = home.class;
         try {
-            fragment =  fragment = (Fragment) fragmentClass.newInstance();
+            fragment = (Fragment) fragmentClass.newInstance();
         }catch (Exception e) {
             e.printStackTrace();
         }
@@ -84,6 +103,12 @@ public class mainradio extends AppCompatActivity
 
         int id = item.getItemId();
 
+        Bundle args = new Bundle();
+        args.putString("artistName", artistName);
+        args.putString("songName", songName);
+        args.putString("hostName", hostName);
+        args.putString("listenerCount", listenerCount);
+
         if (id == R.id.nav_camera) {
             fragmentClass = alarm.class;
         } else if (id == R.id.nav_home) {
@@ -100,6 +125,7 @@ public class mainradio extends AppCompatActivity
 
         try {
             fragment = (Fragment) fragmentClass.newInstance();
+            fragment.setArguments(args);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -111,5 +137,100 @@ public class mainradio extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    // you can make this class as another java file so it will be separated from your main activity.
+    public class AsyncTaskParseJson extends AsyncTask<String, String, String> {
+
+        final String TAG = "AsyncTaskParseJson.java";
+
+        // set your json string url here
+
+        // My test json data, hosted on public server that is identical to the one provided by TA
+        //String yourJsonStringUrl = "http://turtleboys.com/rowdyJson.php";
+
+        String yourJsonStringUrl = "http://10.245.121.71:8000/status-json.xsl";
+
+        // contacts JSONArray
+        JSONArray dataJsonArr = null;
+        JSONObject jsonRootObject;
+
+        @Override
+        protected void onPreExecute() {}
+
+        @Override
+        protected String doInBackground(String... arg0) {
+
+            try {
+
+                // instantiate our json parser
+                JsonParser jParser = new JsonParser();
+
+                // get json string from url
+                JSONObject json = jParser.getJSONFromUrl(yourJsonStringUrl);
+
+                JSONObject d = json.getJSONObject("icestats");
+                JSONObject c = d.getJSONObject("source");
+                Log.e(TAG, c.toString());
+                String host = c.getString("listenurl");
+                String listeners = c.getString("listeners");
+                String title = c.getString("title");
+                String[] titleInfo = title.split(" - ", 2);
+                String artist = titleInfo[0];
+                String songName = titleInfo[1];
+
+                // show the values in our logcat
+                Log.e(TAG, "host: " + host
+                        + ", listeners: " + listeners
+                        + ", artist: " + artist
+                        + ", song: " + songName);
+
+                setArtistName(artist);
+                setSongName(songName);
+                setHostName(host);
+                setListenerCount(listeners);
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String strFromDoInBg) {}
+    }
+
+    public String getArtistName() {
+        return artistName;
+    }
+
+    public void setArtistName(String artistName) {
+        this.artistName = artistName;
+    }
+
+    public String getSongName() {
+        return songName;
+    }
+
+    public void setSongName(String songName) {
+        this.songName = songName;
+    }
+
+    public String getListenerCount() {
+        return listenerCount;
+    }
+
+    public void setListenerCount(String listenerCount) {
+        this.listenerCount = listenerCount;
+    }
+
+    public String getHostName() {
+        return hostName;
+    }
+
+    public void setHostName(String hostName) {
+        this.hostName = hostName;
     }
 }

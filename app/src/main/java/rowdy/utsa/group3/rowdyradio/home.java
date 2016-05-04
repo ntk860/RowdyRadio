@@ -1,12 +1,19 @@
 package rowdy.utsa.group3.rowdyradio;
 
 import android.content.Context;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.IOException;
 
 
 /**
@@ -26,6 +33,19 @@ public class home extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    static MediaPlayer mPlayer;
+    ImageView buttonPlay;
+    ImageView buttonStop;
+    ImageView coverArtField;
+    TextView artistNameField;
+    TextView songNameField;
+    TextView listenerCountField;
+
+    String artistName;
+    String songName;
+    String hostName;
+    String listenerCount;
 
     private OnFragmentInteractionListener mListener;
 
@@ -47,6 +67,7 @@ public class home extends Fragment {
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -57,6 +78,10 @@ public class home extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+            artistName = getArguments().getString("artistName");
+            songName = getArguments().getString("songName");
+            hostName = getArguments().getString("hostName");
+            listenerCount = getArguments().getString("listenerCount");
         }
     }
 
@@ -64,7 +89,91 @@ public class home extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        final View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        artistNameField = (TextView) view.findViewById(R.id.artistName);
+        songNameField = (TextView) view.findViewById(R.id.songName);
+        listenerCountField = (TextView) view.findViewById(R.id.listenerCount);
+        coverArtField = (ImageView) view.findViewById(R.id.albumArt);
+
+        coverArtField.setImageResource(R.drawable.def_cover_art);
+
+        if(null == listenerCount){
+            listenerCount = "1";
+            artistName = "Stream Unavailable";
+            songName = "Off Campus";
+
+            // Set a default fallback stream, since UTSA stream is only available on campus
+            hostName = "http://6093.live.streamtheworld.com/CBSNEWS_SC?SRC=CBS&DIST=CBSNEWS&TGT=CBSNEWSMOBILEPLAYER";
+        } else {
+            switch (artistName){
+                case "Seatbelts":
+                    coverArtField.setImageResource(R.drawable.tank);
+                    break;
+                case "Queen":
+                    coverArtField.setImageResource(R.drawable.bohemian_rhapsody);
+                    break;
+                default:
+                    coverArtField.setImageResource(R.drawable.def_cover_art);
+                    break;
+            }
+
+        }
+
+        Toast.makeText(getActivity().getApplicationContext(), "HOST: " + hostName, Toast.LENGTH_LONG).show();
+
+        artistNameField.setText(artistName);
+        songNameField.setText(songName);
+        listenerCountField.setText("Listeners: " + listenerCount);
+
+        final String streamUrl = hostName;
+        buttonPlay = (ImageView) view.findViewById(R.id.playBtn);
+        buttonStop = (ImageView) view.findViewById(R.id.pauseBtn);
+        buttonPlay.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                buttonPlay.setVisibility(View.INVISIBLE);
+                buttonStop.setVisibility(View.VISIBLE);
+
+                mPlayer = new MediaPlayer();
+                mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                try {
+                    mPlayer.setDataSource(streamUrl);
+                    Toast.makeText(getActivity().getApplicationContext(), "Stream is playing!", Toast.LENGTH_LONG).show();
+                } catch (IllegalArgumentException e) {
+                    Toast.makeText(getActivity().getApplicationContext(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
+                } catch (SecurityException e) {
+                    Toast.makeText(getActivity().getApplicationContext(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
+                } catch (IllegalStateException e) {
+                    Toast.makeText(getActivity().getApplicationContext(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    mPlayer.prepare();
+                } catch (IllegalStateException e) {
+                    Toast.makeText(getActivity().getApplicationContext(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
+                } catch (IOException e) {
+                    Toast.makeText(getActivity().getApplicationContext(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
+                }
+                mPlayer.start();
+            }
+        });
+
+        buttonStop.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                if(mPlayer!=null && mPlayer.isPlaying()){
+                    buttonPlay.setVisibility(View.VISIBLE);
+                    buttonStop.setVisibility(View.INVISIBLE);
+                    mPlayer.stop();
+                }
+            }
+        });
+
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -84,6 +193,11 @@ public class home extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        // TODO Auto-generated method stub
+        if (mPlayer != null) {
+            mPlayer.release();
+            mPlayer = null;
+        }
     }
 
     /**
