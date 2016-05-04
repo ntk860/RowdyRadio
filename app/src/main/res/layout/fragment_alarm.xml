@@ -4,10 +4,47 @@
     android:layout_height="match_parent"
     tools:context="rowdy.utsa.group3.rowdyradio.alarm">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="alarm fragment" />
+        android:layout_height="match_parent">
+
+        <TimePicker
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/alarmTimePicker"
+            android:layout_centerHorizontal="true" />
+
+
+        <ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Alarm On/Off"
+            android:id="@+id/alarmToggle"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/alarmTimePicker"
+            android:onClick="onToggleClicked"
+            android:textOff="Add"
+            android:textOn="Add"
+            android:layout_marginTop="-140dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text=""
+            android:id="@+id/alarmText"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="60dp"
+            android:layout_below="@+id/alarmToggle"
+            android:background="#88000000"
+            android:textColor="#ffffff"/>
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="350dp"
+            android:id="@+id/alarmListView"/>
+    </RelativeLayout>
 
 </FrameLayout>
