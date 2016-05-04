@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -149,11 +148,8 @@ public class mainradio extends AppCompatActivity
         // My test json data, hosted on public server that is identical to the one provided by TA
         //String yourJsonStringUrl = "http://turtleboys.com/rowdyJson.php";
 
+        // Prod URL
         String yourJsonStringUrl = "http://10.245.121.71:8000/status-json.xsl";
-
-        // contacts JSONArray
-        JSONArray dataJsonArr = null;
-        JSONObject jsonRootObject;
 
         @Override
         protected void onPreExecute() {}
